@@ -1,85 +1,79 @@
-# CI/CD Implementation
-
-## Description
-
-This is an example of implementation of CI and CD pipelines on a project.
-
-For a project build we're using Docker. In order to deploy, we are using [Render](https://render.com).
 
 
-## CI Pipeline: Build & Test (ruxailab)
 
-This GitHub Actions workflow automates the Continuous Integration (CI) process by building a Docker image and running unit tests whenever changes are pushed to the development branch.
 
-### Workflow Overview
-The pipeline executes the following automated tasks:
 
-1. **Environment Setup:** Initializes a runner with Python 3.10 and the latest Node.js LTS version.
+# CI/CD Pipeline: Build, Test & Deploy (ruxailab)
 
-2. **Dependency Management:** Explicitly installs axios@1.6.0 to ensure compatibility and performs a clean install of all project dependencies using npm ci.
+This repository uses GitHub Actions to manage the full lifecycle of the **ruxailab** application, from code validation to production deployment on Render.
 
-3. **Docker Build:** Builds the ruxailab Docker image using the --no-cache flag to prevent issues with corrupted layers.
+---
 
-4. **Testing:** Executes the test suite via npm test.
+## Phase 1: Continuous Integration (CI)
+**Workflow Name:** `CI Pipeline by DenisLazarian`
 
-5. **Artifact Generation:** Saves the Docker image as a .tar file and uploads it as a downloadable GitHub Artifact.
+This pipeline validates the code and prepares a testable Docker image.
 
 ### Triggers
-The workflow is triggered by pushing all the commits to the develop branch. Also it can be execute manually due the workflow_dispatch event.
+- **Push:** To the `develop` branch.
+- **Manual:** Via `workflow_dispatch`.
 
+### Key Steps
+1. **Environment Setup:** Configures Python 3.10 and Node.js LTS.
+2. **Dependency Fix:** Forces `axios@1.6.0` to prevent ESM compatibility issues during testing.
+3. **Docker Build:** Creates the `ruxailab` image using `--no-cache` to ensure a clean build.
+4. **Automated Testing:** Runs `npm test` to validate business logic.
+5. **Artifact Storage:** Saves the build as `ruxailab.tar` in GitHub Artifacts for manual inspection.
 
+---
 
-Gemini ha dicho
-This Continuous Deployment (CD) YAML is well-structured for a modern "Build-Push-Deploy" flow. It ensures that deployment only happens if the CI tests have passed, and it utilizes Docker Hub as a registry and Render as the hosting provider.
+## Phase 2: Continuous Deployment (CD)
+**Workflow Name:** `CD pipeline by DenisLazarian`
 
-Here is the English README.md for your CD pipeline:
-
-## CD Pipeline: Deploy to Production (ruxailab)
-This GitHub Actions workflow automates the Continuous Deployment (CD) process. It triggers automatically after a successful CI run to build the production image, push it to Docker Hub, and notify the hosting provider (Render) to pull the new version.
-
-### Workflow Overview
-The pipeline executes the following automated phases:
-
-Trigger Validation: Only runs if the "CI Pipeline by DenisLazarian" workflow completes with a success status.
-
-Docker Hub Authentication: Logs into Docker Hub using encrypted secrets and variables.
-
-Release Phase: * Builds the production-ready Docker image.
-
-Tags it as latest.
-
-Pushes the image to the specified repository on Docker Hub.
-
-Deploy Phase: Sends a POST request via a Webhook (Render Deploy Hook) to trigger an immediate re-deployment of the live service.
+This pipeline automates the release to Docker Hub and triggers the live deployment.
 
 ### Triggers
-The workflow is triggered by:
+- **Workflow Run:** Starts automatically after the **CI Pipeline** completes.
+- **Conditional:** Only executes if the CI status is `success`.
 
-Workflow Run: Automatically starts when the CI Pipeline by DenisLazarian completes.
+### Key Steps
+1. **Registry Auth:** Logs into Docker Hub using secure credentials.
+2. **Release:** Builds and pushes the production image to `${{ vars.DOCKER_USERNAME }}/uxremotelab:latest`.
+3. **Deployment:** Hits the **Render Deploy Hook** to pull the latest image and update the live service.
 
-Conditional Logic: The if: ${{ github.event.workflow_run.conclusion == 'success' }} check prevents deployment if the previous tests or builds failed.
+---
 
-### Required Secrets & Variables
-To run this pipeline, the following must be configured in your GitHub Repository settings:
+## Required Configuration
 
-### Name	Type	Description
-DOCKER_USERNAME	Variable	Your Docker Hub username.
-DOCKER_TOKEN	Secret	Personal Access Token (PAT) from Docker Hub.
-RENDER_DEPLOY_HOOK_URL	Secret	The unique Deploy Hook URL provided by Render.
+To enable these pipelines, configure the following in your GitHub Repository:
 
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `DOCKER_USERNAME` | **Variable** | Your Docker Hub ID. |
+| `DOCKER_TOKEN` | **Secret** | Docker Hub Personal Access Token. |
+| `RENDER_DEPLOY_HOOK_URL` | **Secret** | The Webhook URL from your Render Dashboard. |
 
-### Job Details & Steps
-Step	Description	Technical Note
-Checkout Code	Clones the repo	Necessary to access the Dockerfile for the production build.
-Log in to Docker Hub	Auth via docker/login-action	Uses v3 for optimized layer caching and security.
-Build and Push	docker build & docker push	Tags the image as username/uxremotelab:latest.
-Trigger Render	curl -f [HOOK_URL]	Uses a silent fail-safe (continue-on-error) to prevent the workflow from marking a "Failure" if Render's API is temporarily busy.
+---
 
+## Local Usage of Artifacts
 
-Maintenance Notes
-Versioning: This pipeline uses the :latest tag. For better rollback capabilities, consider adding a unique tag such as the GitHub SHA: ${{ github.sha }}.
+If you need to test the image generated by the **CI Pipeline** on your local machine:
 
-Build Context: Ensure that your Dockerfile is optimized for production (e.g., using multi-stage builds) to keep the image pushed to Docker Hub as small as possible.
+1. Download `docker-image.zip` from the Actions tab.
+2. Extract the `.tar` file.
+3. Run the following commands:
 
-Security: Never hardcode your Docker password; always use the DOCKER_TOKEN secret.
+```bash
+# Load the image into Docker
+docker load -i ruxailab.tar
 
+# Run the container
+docker run -d -p 8080:8080 ruxailab
+```
+
+### Maintenance Notes
+- **Versioning:** This pipeline uses the :latest tag. For better rollback capabilities, consider adding a unique tag such as the GitHub SHA: `${{ github.sha }}`.
+
+- **Build Context:** Ensure that your Dockerfile is optimized for production (e.g., using multi-stage builds) to keep the image pushed to Docker Hub as small as possible.
+
+- **Security:** Never hardcode your Docker password; always use the `DOCKER_TOKEN` secret.
