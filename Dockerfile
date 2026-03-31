@@ -8,12 +8,12 @@ RUN npm ci
 
 COPY babel.config.js ./
 COPY vue.config.js ./
-COPY .env* ./
+COPY .env ./
 COPY public ./public
 COPY src ./src
 
 # Run build as per the script defined in package.json
-RUN npm run build-dev
+RUN npm run build-dev && npm install -g npm
 
 # Production stage using a minimal Node.js image
 FROM node:20.18-alpine AS production-stage
