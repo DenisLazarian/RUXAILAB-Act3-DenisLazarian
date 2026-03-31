@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: RUXAILAB
-      IMAGE_NAME: ${{ vars.DOCKER_USERNAME }}/$PROJECT_NAME:latest
 
 
     steps:
@@ -39,6 +38,7 @@ jobs:
 
       - name: Docker build
         run: |
+           IMAGE_NAME: ${{ vars.DOCKER_USERNAME }}/$PROJECT_NAME:latest
            docker build -t $IMAGE_NAME .
            docker save $IMAGE_NAME -o $PROJECT_NAME.tar
 
