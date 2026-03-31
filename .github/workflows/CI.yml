@@ -2,12 +2,11 @@ name: CI Pipeline by DenisLazarian
 
 on:
   push:
-    branches: ["develop", "actions/ci-implementation"]
+    branches: ["develop"]
   workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
-
 
     steps:
       - uses: actions/checkout@v4
