@@ -2,7 +2,7 @@ name: CI Pipeline by DenisLazarian
 
 on:
   push:
-    branches: ["develop", "ci-implementation"]
+    branches: ["develop", "actions/ci-implementation"]
   workflow_dispatch:
 jobs:
   build:
