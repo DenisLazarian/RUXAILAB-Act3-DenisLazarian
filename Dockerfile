@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm ci && npm install -g npm
 
 COPY babel.config.js ./
 COPY vue.config.js ./
@@ -13,7 +13,7 @@ COPY public ./public
 COPY src ./src
 
 # Run build as per the script defined in package.json
-RUN npm run build-dev && npm install -g npm
+RUN npm run build-dev
 
 # Production stage using a minimal Node.js image
 FROM node:20.18-alpine AS production-stage
