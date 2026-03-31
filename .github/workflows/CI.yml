@@ -32,6 +32,7 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Docker build
+
         run: |
            IMAGE_NAME=RUXAILAB:latest
 #           IMAGE_NAME= ${{ vars.DOCKER_USERNAME }}/RUXAILAB:latest
