@@ -227,6 +227,7 @@
                                       }"
                                     >
                                       <v-icon size="small" class="mr-1"
+
                                         >mdi-comment</v-icon
                                       >
                                       {{ comment.text || comment }}
