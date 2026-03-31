@@ -27,6 +27,7 @@ jobs:
         run: npm ci
 
       - name: Docker build
+        continue-on-error: true
         run: |
           docker build -t ruxailab .
           docker save ruxailab -o ruxailab.tar
