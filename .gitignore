@@ -13,7 +13,7 @@ firestore-debug.log
 # local env files
 .env.local
 .env.*.local
-.env
+#.env
 .env.production
 .env.development
 
