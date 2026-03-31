@@ -32,12 +32,11 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Docker build
-
         run: |
-           IMAGE_NAME=RUXAILAB:latest
+#           IMAGE_NAME=RUXAILAB:latest
 #           IMAGE_NAME= ${{ vars.DOCKER_USERNAME }}/RUXAILAB:latest
-           docker build -t $IMAGE_NAME .
-           docker save $IMAGE_NAME -o RUXAILAB.tar
+           docker build -t RUXAILAB .
+           docker save RUXAILAB -o RUXAILAB.tar
 
       - name: Run Test
         run: npm test
