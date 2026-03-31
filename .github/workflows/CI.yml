@@ -33,20 +33,20 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Docker build
         run: |
-          docker build -t RUXAILAB .
-          docker save RUXAILAB -o RUXAILAB.tar
+          docker build -t ruxailab .
+          docker save ruxailab -o ruxailab.tar
 
       - name: Run Test
         run: npm test
         # Para Usar la imagen:
         #   - Extraer del artifact.
         #   - Implementar imagen en máquina local:
-  #              docker load -i RUXAILAB.tar # Para cargar la imagen en local
+  #              docker load -i ruxailab.tar # Para cargar la imagen en local
       - name: Upload Docker image as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: docker-image
-          path: RUXAILAB.tar
+          path: ruxailab.tar
 
 
 
