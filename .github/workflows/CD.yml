@@ -1,8 +1,8 @@
-name: CI pipeline by DenisLazarian
+name: CD pipeline by DenisLazarian
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["CI Pipeline by DenisLazarian"]
     types:
       - completed
 
@@ -24,11 +24,12 @@ jobs:
       # Release Phase.
       - name: Build and Push Docker image
         run: |
-          docker build -t ${{ vars.DOCKER_USERNAME }}/mi-app:latest .
-          docker push ${{ vars.DOCKER_USERNAME }}/mi-app:latest
+          docker build -t ${{ vars.DOCKER_USERNAME }}/uxremotelab:latest .
+          docker push ${{ vars.DOCKER_USERNAME }}/uxremotelab:latest
 
        # Deploy Phase: Using Render Hook to deploy every change on production.
       - name: Trigger Render Deployment
+        continue-on-error: true
         run: |
-          echo "Notificando a Render para iniciar el despliegue..."
+          echo "Notifying Render to re-deploy..."
           curl -f ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
