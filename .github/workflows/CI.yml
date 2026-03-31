@@ -35,7 +35,7 @@ jobs:
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-
+        continue-on-error: true
 
       - name: Docker build
         run: |
