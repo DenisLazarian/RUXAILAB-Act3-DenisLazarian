@@ -555,7 +555,7 @@ async function fetchUserData(userId) {
 }
 ```
 
-- [README.md](README.md) - Project overview and setup
+- [README.md](README_original) - Project overview and setup
 - [Vue.js Documentation](https://vuejs.org/)
 - [Vuetify Documentation](https://vuetifyjs.com/)
 - [Firebase Documentation](https://firebase.google.com/docs)
