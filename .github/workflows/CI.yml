@@ -25,15 +25,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         continue-on-error: true
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-
-
       - name: Docker build
         run: |
            IMAGE_NAME=RUXAILAB:latest
@@ -43,7 +40,6 @@ jobs:
 
       - name: Run Test
         run: npm test
-
         # Para Usar la imagen:
         #   - Extraer del artifact.
         #   - Implementar imagen en máquina local:
