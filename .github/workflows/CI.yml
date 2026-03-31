@@ -36,7 +36,7 @@ jobs:
 
       - name: Docker build
         run: |
-           IMAGE_NAME: ${{ vars.DOCKER_USERNAME }}/RUXAILAB:latest
+           IMAGE_NAME= ${{ vars.DOCKER_USERNAME }}/RUXAILAB:latest
            docker build -t $IMAGE_NAME .
            docker save $IMAGE_NAME -o RUXAILAB.tar
 
