@@ -29,7 +29,7 @@ jobs:
       - name: Docker build
         continue-on-error: true
         run: |
-          docker build -t ruxailab .
+          docker build --no-cache -t ruxailab .
           docker save ruxailab -o ruxailab.tar
 
       - name: Run Test
