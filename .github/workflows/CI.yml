@@ -7,8 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      PROJECT_NAME: RUXAILAB
 
 
     steps:
@@ -38,9 +36,9 @@ jobs:
 
       - name: Docker build
         run: |
-           IMAGE_NAME: ${{ vars.DOCKER_USERNAME }}/$PROJECT_NAME:latest
+           IMAGE_NAME: ${{ vars.DOCKER_USERNAME }}/RUXAILAB:latest
            docker build -t $IMAGE_NAME .
-           docker save $IMAGE_NAME -o $PROJECT_NAME.tar
+           docker save $IMAGE_NAME -o RUXAILAB.tar
 
       - name: Run Test
         run: npm test
@@ -53,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: docker-image
-          path: $PROJECT_MAME.tar
+          path: RUXAILAB.tar
 
 
 
