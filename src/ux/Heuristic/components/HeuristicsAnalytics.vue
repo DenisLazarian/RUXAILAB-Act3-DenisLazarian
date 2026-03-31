@@ -226,10 +226,7 @@
                                           cIndex < itemData.comments.length - 1,
                                       }"
                                     >
-                                      <v-icon size="small" class="mr-1"
-
-                                        >mdi-comment</v-icon
-                                      >
+                                      <v-icon size="small" class="mr-1">mdi-comment</v-icon>
                                       {{ comment.text || comment }}
                                       <div
                                         v-if="
